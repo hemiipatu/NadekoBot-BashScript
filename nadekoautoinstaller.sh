@@ -173,7 +173,7 @@ read -n 1 -s -p "Press any key to continue..."
 	echo "Installing Git..."
 	sudo apt-get install git -y
 	echo "Installing .NET Core..."
-	sudo apt-get install dotnet-sdk-3.1 -y
+	sudo apt-get install dotnet-sdk-5.0 -y
 	echo "Installing prerequisites..."
 	sudo apt-get install libopus0 opus-tools libopus-dev libsodium-dev tmux python python3-pip redis-server ffmpeg -y
 	# sudo snap install ffmpeg
@@ -262,7 +262,7 @@ read -n 1 -s -p "Press any key to continue..."
 	echo "Installing Git..."
 	sudo apt-get install git -y
 	echo "Installing .NET Core..."
-	sudo apt-get install dotnet-sdk-3.1 -y
+	sudo apt-get install dotnet-sdk-5.0 -y
 	echo "Installing prerequisites..."
 	sudo apt-get install libopus0 opus-tools libopus-dev libsodium-dev ffmpeg tmux python python3-pip redis-server -y
 	sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
@@ -343,7 +343,34 @@ read -n 1 -s -p "Press any key to continue..."
 	echo "Installing Git..."
 	sudo apt-get install git -y
 	echo "Installing .NET Core..."
-	sudo apt-get install dotnet-sdk-3.1 -y
+	sudo apt-get install dotnet-sdk-5.0 -y
+	echo "Installing prerequisites..."
+	sudo apt-get install libopus0 opus-tools libopus-dev libsodium-dev ffmpeg tmux python python3-pip redis-server -y
+	sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+	sudo chmod a+rx /usr/local/bin/youtube-dl
+	# remove dotnet temp
+	#sudo rm -f packages-microsoft-prod.deb
+	elif [ "$VER" = "20.10" ]; then
+	echo ""
+	echo "Preparing..."
+	sudo apt-get update
+	#wget https://packages.microsoft.com/config/ubuntu/20.10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+	#sudo dpkg -i packages-microsoft-prod.deb
+	sudo apt-get install software-properties-common apt-transport-https curl gpg -y
+	#Backup for manual installation.
+	wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o microsoft.asc.gpg
+	sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+	wget https://packages.microsoft.com/config/ubuntu/20.10/prod.list
+	sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+	sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+	sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	# sudo apt-get dist-upgrade -y
+	echo "Installing Git..."
+	sudo apt-get install git -y
+	echo "Installing .NET Core..."
+	sudo apt-get install dotnet-sdk-5.0 -y
 	echo "Installing prerequisites..."
 	sudo apt-get install libopus0 opus-tools libopus-dev libsodium-dev ffmpeg tmux python python3-pip redis-server -y
 	sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
@@ -391,7 +418,7 @@ elif [ "$OS" = "Debian" ]; then
 		sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
 		sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
 		sudo apt-get update
-		sudo apt-get install dotnet-sdk-3.1 -y
+		sudo apt-get install dotnet-sdk-5.0 -y
 		echo "Installing prerequisites..."
 		echo "deb http://ftp.debian.org/debian jessie-backports main" | tee /etc/apt/sources.list.d/debian-backports.list
 		sudo apt-get update && sudo apt install ffmpeg -y
@@ -400,6 +427,30 @@ elif [ "$OS" = "Debian" ]; then
 		sudo apt-get install tmux python python3.5 -y
 		sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
 		sudo chmod a+rx /usr/local/bin/youtube-dl
+	elif [ "$SVER" = "10" ]; then
+		echo ""
+		echo "Preparing..."
+		apt-get update
+		apt-get upgrade -y
+		apt-get install sudo -y
+		sudo apt-get install software-properties-common apt-transport-https -y
+		sudo apt-get install curl libunwind8 gettext -y
+		wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
+		sudo mv -f microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+		wget -q https://packages.microsoft.com/config/debian/10/prod.list
+		sudo mv -f prod.list /etc/apt/sources.list.d/microsoft-prod.list
+		sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+		sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+		sudo apt-get update
+		sudo apt-get install dotnet-sdk-5.0 -y
+		echo "Installing prerequisites..."
+		echo "deb http://ftp.debian.org/debian jessie-backports main" | tee /etc/apt/sources.list.d/debian-backports.list
+		sudo apt-get update && sudo apt install ffmpeg -y
+		sudo apt-get install libopus0 opus-tools libopus-dev libsodium-dev redis-server -y
+		sudo apt-get install git -y
+		sudo apt-get install tmux python python3.5 -y
+		sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+		sudo chmod a+rx /usr/local/bin/youtube-dl		
 	else
 		echo -e "Your OS $OS $VER $ARCH probably can run Microsoft .NET Core. \nContact NadekoBot's support on Discord with screenshot."
 		rm nadekoautoinstaller.sh
@@ -493,7 +544,7 @@ elif [ "$OS" = "CentOS" ]; then
 		sudo yum install git2u opus opus-devel ffmpeg ffmpeg-devel tmux yum-utils -y
 		sudo yum -y groupinstall development
 		sudo yum --obsoletes --exclude=kernel* update -y
-		sudo yum install python python36u python36u-pip python36u-devel dotnet-sdk-3.1 -y
+		sudo yum install python python36u python36u-pip python36u-devel dotnet-sdk-5.0 -y
 		sudo yum install redis -y
 		sudo systemctl start redis
 		sudo systemctl enable redis
